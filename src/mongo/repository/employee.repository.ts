@@ -12,6 +12,10 @@ export class EmployeeRepository{
         @InjectModel('employee') private readonly employeeModel: Model<Employee>
     ){}
 
+    async getEmployees(): Promise<Employee[]>{
+        return await this.employeeModel.find().select('-password');
+    }
+
     async authEmployee(employeeData: AuthEmployeeDTO): Promise<Employee>{
         return await this.employeeModel.findOne({email: employeeData.email, password: employeeData.password});
     }
