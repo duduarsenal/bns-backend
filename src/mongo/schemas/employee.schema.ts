@@ -4,7 +4,10 @@ export const EmployeeSchema = new Schema({
 
     name: String,
     email: String,
-    password: String,
+    password: {
+        type: String,
+        select: false
+    },
     permission: String,
     __v: {
         type: Number,

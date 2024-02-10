@@ -7,6 +7,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { ConfigModule } from '@nestjs/config';
 import { AuthMiddleware } from './middlewares/auth.middleware';
 import { JwtModule } from '@nestjs/jwt';
+import { AuthAdminMiddleware } from './middlewares/admin.middleware';
 
 @Module({
   imports: [
@@ -26,11 +27,16 @@ import { JwtModule } from '@nestjs/jwt';
   controllers: [EmployeeController],
   providers: [EmployeeService, EmployeeRepository],
 })
+
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer ){
     consumer
       .apply(AuthMiddleware)
       .forRoutes({ path: '/employee', method: RequestMethod.GET})
+
+    consumer
+      .apply(AuthAdminMiddleware)
+      .forRoutes({path: '/employee/create', method: RequestMethod.POST})
     
   }
 }
