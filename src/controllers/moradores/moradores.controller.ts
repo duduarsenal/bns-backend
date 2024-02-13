@@ -10,18 +10,20 @@ export class MoradoresController {
   //Rota para listar todos os moradores do sistema
   @Get('/')
   async getMoradores(@Request() req: Request): Promise<Moradores[]> {
-    // const user = req['user'];
-    // if (!user) throw new UnauthorizedException('Usuario não autorizado');
+    const user = req['user'];
+    if (!user) throw new UnauthorizedException('Usuario não autorizado');
 
     return await this.moradoresService.getMoradores();
   }
 
-  // //Rota de Informações do perfil do funcionario
-  // @Get('/:moradoresID')
-  // async getMoradorById(@Param() { moradorID }, @Request() req: Request): Promise<MoradoresDTO> {
-  //   // const user = req['user'];
-  //   return await this.moradoresService.getMoradorById(moradorID);
-  // }
+  //Rota de Informações do perfil do morador
+  @Get('/:moradorID')
+  async getMoradorById(@Param() { moradorID }, @Request() req: Request): Promise<Moradores> {
+    const user = req['user'];
+    if (!user) throw new UnauthorizedException('Usuario não autorizado')
+
+    return await this.moradoresService.getMoradorById(moradorID);
+  }
 
   //Rota para criar novos funcionarios
   @Post('/create')

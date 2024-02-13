@@ -1,5 +1,6 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
 import { ResidenciasDTO } from 'src/dto/residencias.dto';
+import { Residencias } from 'src/mongo/interfaces/residencias.interface';
 import { ResidenciasService } from 'src/services/residencias/residencias.service';
 
 @Controller('residencias')
@@ -7,8 +8,15 @@ export class ResidenciasController {
     constructor(private readonly residenciaService: ResidenciasService) {}
 
     
+    //Rota para buscar todas as residências
     @Get('/')
-    async getResidenciaByFilter(@Body() residenciaData: ResidenciasDTO): Promise<ResidenciasDTO>{
+    async getAllResidencias(): Promise<Residencias[]>{
+        return await this.residenciaService.getAllResidencias();
+    }
+
+    //Rota para buscar uma residência com base em um filtro
+    @Get('/filter')
+    async getResidenciaByFilter(@Body() residenciaData: ResidenciasDTO): Promise<Residencias>{
         return await this.residenciaService.getResidenciaByFilter(residenciaData);
     }
 
@@ -16,7 +24,7 @@ export class ResidenciasController {
     async createResidencia(@Body() newResidencia: ResidenciasDTO): Promise<Object>{
         const createdResidencia = await this.residenciaService.createResidencia(newResidencia);
 
-    if (createdResidencia) return { message: 'Residencia criado com sucesso' };
+        if (createdResidencia) return { status: 200, error: false, message: 'Residencia criada com sucesso' };
     }
 
 }

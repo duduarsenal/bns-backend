@@ -1,4 +1,4 @@
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 export const ResidenciasSchema = new Schema({
 
@@ -6,7 +6,7 @@ export const ResidenciasSchema = new Schema({
     bloco: String,
     proprietario: String,
     moradores: [{
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'moradores',
         require: false
     }],

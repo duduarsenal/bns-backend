@@ -5,8 +5,8 @@ import {
   MinLength,
   ValidateNested,
 } from 'class-validator';
-import { ResidenciasDTO } from './residencias.dto';
 import { EncomendasDTO } from './encomendas.dto';
+import { ResidenciasDTO } from './residencias.dto';
 import { Type } from 'class-transformer';
 
 export class MoradoresDTO {

@@ -4,8 +4,10 @@ import {
     IsString,
     MaxLength,
     MinLength,
+    ValidateNested,
   } from 'class-validator';
 import { MoradoresDTO } from './moradores.dto';
+import { Type } from 'class-transformer';
   
   export class ResidenciasDTO {
     @IsNotEmpty({ message: 'Item não pode ser vazio' })
@@ -31,6 +33,8 @@ import { MoradoresDTO } from './moradores.dto';
     @MaxLength(100, { message: 'Proprietario não pode ultrapassar $constraint1 caracteres' })
     readonly proprietario: string;
 
+    @Type(() => MoradoresDTO)
+    @ValidateNested({each: true})
     readonly moradores?: MoradoresDTO[]
   }
   

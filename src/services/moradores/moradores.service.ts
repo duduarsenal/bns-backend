@@ -23,10 +23,9 @@ export class MoradoresService {
         }
     }
 
-    async getMoradorById(moradorID: string): Promise<Moradores>{
+    async getMoradorById(moradorID: String): Promise<Moradores>{
         try {
             const morador = await this.moradoresRepository.getMoradorById(moradorID);
-    
             if (!morador) throw new BadRequestException('Usuario não encontrado');
     
             return morador;
@@ -40,16 +39,22 @@ export class MoradoresService {
 
             const { residencia } = newMorador;
             const { apartamento, bloco, proprietario } = residencia;
+
             const residenciaMorador = await this.residenciaRepository.getResidenciaByFilter({apartamento, bloco, proprietario})
-            if(!residenciaMorador) throw new BadRequestException('Residência não existe')
+            if(!residenciaMorador) throw new BadRequestException('Residência não existe no sistema')
             
-            const createdMorador = await this.moradoresRepository.createMorador(newMorador, residenciaMorador._id)
+            const createdMorador = await this.moradoresRepository.getMoradorByFilter(newMorador, residenciaMorador._id)
+            if (createdMorador) throw new BadRequestException('Morador ja cadastrado no sistema')
 
-            if (!createdMorador) throw new BadRequestException('Erro ao criar um funcionario')
+            const morador = await this.moradoresRepository.createMorador(newMorador, residenciaMorador._id);
+            if(!morador) throw new BadRequestException('Erro ao criar novo morador')
 
-            return createdMorador;
+            await this.residenciaRepository.addMoradorToResidencia(residencia, morador._id);
+
+            return morador;
         } catch (error) {
-            throw new BadRequestException(error.message || 'Erro ao criar um funcionario')
+            console.log(error)
+            throw new BadRequestException(error.message || 'Erro ao criar novo morador')
         }
     }
 }

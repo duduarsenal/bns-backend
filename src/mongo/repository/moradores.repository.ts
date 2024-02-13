@@ -1,4 +1,4 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
+import { Injectable } from "@nestjs/common";
 import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose'
 import { Moradores } from "../interfaces/moradores.interface";
@@ -14,16 +14,25 @@ export class MoradoresRepository{
 
     async getMoradores(): Promise<Moradores[]>{
         return await this.moradoresModel.find()
+        .populate({
+            path: 'residencia',
+            select: '-_id',
+            // populate: {
+            //     path: 'moradores',
+            //     select: '-_id -residencia -encomendas'
+            // }
+        })
     }
 
-    async getMoradorById(moradoresID: string): Promise<Moradores>{
-        return await this.moradoresModel.findById({_id: moradoresID}).select('-permission');
+    async getMoradorByFilter(moradorData: MoradoresDTO, residenciaID: string): Promise<Moradores>{
+        return await this.moradoresModel.findOne({name: moradorData.name, residencia: residenciaID})
+    }
+
+    async getMoradorById(moradorID: String): Promise<Moradores>{
+        return await this.moradoresModel.findById({_id: moradorID}).select('-permission');
     }
     
     async createMorador(newMorador: MoradoresDTO, residenciaMorador: Residencias): Promise<Moradores>{
-        const user = await this.moradoresModel.findOne({name: newMorador.name, residencia: residenciaMorador});
-        if (user) throw new BadRequestException('Usuario ja existe');
-
         return await this.moradoresModel.create({name: newMorador.name, residencia: residenciaMorador});
     }
 }

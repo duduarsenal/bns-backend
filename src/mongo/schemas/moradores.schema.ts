@@ -1,15 +1,15 @@
-import { Schema } from "mongoose";
+import mongoose, { Schema } from "mongoose";
 
 export const MoradoresSchema = new Schema({
 
     name: String,
-    residencia: [{
-        type: String,
+    residencia: {
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'residencias',
-        require: false
-    }],
+        require: true
+    },
     encomendas: [{
-        type: String,
+        type: mongoose.Schema.Types.ObjectId,
         ref: 'encomendas',
         require: false
     }],
