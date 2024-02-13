@@ -1,8 +1,10 @@
 import { Body, Controller, Get, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { ResidenciasDTO } from 'src/dto/residencias.dto';
 import { Residencias } from 'src/mongo/interfaces/residencias.interface';
 import { ResidenciasService } from 'src/services/residencias/residencias.service';
 
+@ApiTags('residencias')
 @Controller('residencias')
 export class ResidenciasController {
     constructor(private readonly residenciaService: ResidenciasService) {}
@@ -15,7 +17,7 @@ export class ResidenciasController {
     }
 
     //Rota para buscar uma residência com base em um filtro
-    @Get('/filter')
+    @Post('/filter')
     async getResidenciaByFilter(@Body() residenciaData: ResidenciasDTO): Promise<Residencias>{
         return await this.residenciaService.getResidenciaByFilter(residenciaData);
     }

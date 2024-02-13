@@ -7,7 +7,7 @@ export async function AuthMiddleware(req: Request, res: Response, next: NextFunc
   const jwtService = new JwtService;
 
   if (!access_token) {
-    throw new UnauthorizedException('token não autorizado');
+    throw new UnauthorizedException('Token não encontrado');
   }
 
   try {

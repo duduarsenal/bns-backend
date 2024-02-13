@@ -1,9 +1,10 @@
-import { Body, Controller, Get, Request, Post, UnauthorizedException, Param } from '@nestjs/common';
+import { Body, Controller, Get, Request, Post, UnauthorizedException, Param, BadRequestException } from '@nestjs/common';
+import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { AuthEmployeeDTO } from 'src/dto/authEmployee.dto';
 import { EmployeeDTO } from 'src/dto/employee.dto';
 import { EmployeeService } from 'src/services/employee/employee.service';
 
-
+@ApiTags('funcionarios')
 @Controller('employee')
 export class EmployeeController {
 
@@ -21,8 +22,13 @@ export class EmployeeController {
     }
 
     //Rota de Informações do perfil do funcionario
+    @ApiParam({
+        name: 'employeeID',
+        type: 'string',
+    })
     @Get('/:employeeID')
     async getEmployeeById(@Param() { employeeID }): Promise<EmployeeDTO>{
+        if (!employeeID) throw new BadRequestException('Nenhum ID informado')
         return await this.employeeService.getEmployeeById(employeeID);
     }
 
