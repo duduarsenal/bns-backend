@@ -1,4 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
+import mongoose, { mongo } from 'mongoose';
 import { MoradoresDTO } from 'src/dto/moradores.dto';
 import { Moradores } from 'src/mongo/interfaces/moradores.interface';
 import { MoradoresRepository } from 'src/mongo/repository/moradores.repository';
@@ -55,6 +56,52 @@ export class MoradoresService {
         } catch (error) {
             console.log(error)
             throw new BadRequestException(error.message || 'Erro ao criar novo morador')
+        }
+    }
+
+    async updateMorador(moradorID: mongoose.Schema.Types.ObjectId, moradorData: MoradoresDTO): Promise<Moradores>{
+
+        try {
+            const existMorador = await this.moradoresRepository.getMoradorById(moradorID.toString());
+            if (!existMorador) throw new BadRequestException('Morador não existe no sistema');
+
+            const residenciaAtualMorador = await this.residenciaRepository.getResidenciaById(existMorador.residencia.toString());
+
+            if (moradorData.residencia){
+                var residenciaMorador = await this.residenciaRepository.getResidenciaByFilter(moradorData.residencia)
+                if(!residenciaMorador) throw new BadRequestException('Residência não cadastrada no sistema');
+            }
+
+            if(moradorData.residencia && existMorador.residencia.toString() != residenciaMorador._id.toString()){
+
+                const { apartamento, bloco, proprietario } = residenciaMorador;
+
+                await this.moradoresRepository.updateResidenciaMorador(moradorID.toString(), residenciaMorador._id);
+                await this.residenciaRepository.deleteMoradorFromResidencia(
+                    { 
+                        apartamento: residenciaAtualMorador.apartamento, 
+                        bloco: residenciaAtualMorador.bloco, 
+                        proprietario: residenciaAtualMorador.proprietario
+                    }, moradorID.toString());
+                await this.residenciaRepository.addMoradorToResidencia({ apartamento, bloco, proprietario }, moradorID);
+            }
+
+            return await this.moradoresRepository.updateMorador(moradorID.toString(), moradorData.name);
+        } catch (error) {
+            console.log(error)
+            throw new BadRequestException(error.message || 'Erro ao atualizar o morador')
+        }
+    }
+
+    async deleteMorador(moradorID: String): Promise<String>{
+        try {
+            const existMorador = await this.moradoresRepository.getMoradorById(moradorID);
+            if (!existMorador) throw new BadRequestException('Morador não existe no sistema')
+
+            return await this.moradoresRepository.deleteMorador(moradorID);
+        } catch (error) {
+            console.log(error)
+            throw new BadRequestException(error.message || 'Erro ao deletar morado do sistema')
         }
     }
 }

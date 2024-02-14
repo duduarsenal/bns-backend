@@ -14,18 +14,27 @@ export class ResidenciasRepository {
   async getAllResidencias(): Promise<Residencias[]> {
     return await this.residenciasModel.find().select('-_id').populate({
       path: 'moradores',
-      select: '-_id -residencia',
+      select: '-residencia',
     });
+  }
+
+  async getResidenciaById(residenciaID: String): Promise<Residencias> {
+    return await this.residenciasModel.findById({ _id: residenciaID });
   }
 
   async getResidenciaByFilter(
     residenciaData: ResidenciasDTO,
   ): Promise<Residencias> {
-    return await this.residenciasModel.findOne({
-      apartamento: residenciaData.apartamento,
-      bloco: residenciaData.bloco,
-      proprietario: residenciaData.proprietario,
-    });
+    return await this.residenciasModel
+      .findOne({
+        apartamento: residenciaData.apartamento,
+        bloco: residenciaData.bloco,
+        proprietario: residenciaData.proprietario,
+      })
+      .populate({
+        path: 'moradores',
+        select: '-_id -residencia',
+      });
   }
 
   async addMoradorToResidencia(
@@ -49,6 +58,30 @@ export class ResidenciasRepository {
       },
       { moradores: listaMoradores },
       { new: true },
+    );
+  }
+
+  async deleteMoradorFromResidencia(
+    residencia: ResidenciasDTO,
+    moradorID: string,
+  ): Promise<void> {
+    const res = await this.residenciasModel.findOne({
+      apartamento: residencia.apartamento,
+      bloco: residencia.bloco,
+      proprietario: residencia.proprietario,
+    });
+
+    const listaMoradores = await Promise.all(
+      res.moradores.filter((morador) => morador.toString() != moradorID),
+    );
+
+    await this.residenciasModel.findOneAndUpdate(
+      {
+        apartamento: residencia.apartamento,
+        bloco: residencia.bloco,
+        proprietario: residencia.proprietario,
+      },
+      { moradores: listaMoradores },
     );
   }
 

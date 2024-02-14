@@ -61,6 +61,8 @@ export class AppModule implements NestModule {
         { path: '/employee', method: RequestMethod.GET },
         { path: '/moradores', method: RequestMethod.GET },
         { path: '/moradores/:moradorID', method: RequestMethod.GET },
+        { path: '/moradores/:moradorID', method: RequestMethod.DELETE },
+        { path: '/moradores/:moradorID', method: RequestMethod.PATCH },
       )
       .apply(AuthAdminMiddleware) //Autenticação de NIVEL ADMIN
       .forRoutes({ path: '/employee/create', method: RequestMethod.POST });

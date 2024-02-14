@@ -17,10 +17,10 @@ export class MoradoresRepository{
         .populate({
             path: 'residencia',
             select: '-_id',
-            // populate: {
-            //     path: 'moradores',
-            //     select: '-_id -residencia -encomendas'
-            // }
+            populate: {
+                path: 'moradores',
+                select: '-_id -residencia -encomendas'
+            }
         })
     }
 
@@ -34,5 +34,25 @@ export class MoradoresRepository{
     
     async createMorador(newMorador: MoradoresDTO, residenciaMorador: Residencias): Promise<Moradores>{
         return await this.moradoresModel.create({name: newMorador.name, residencia: residenciaMorador});
+    }
+
+    async updateMorador(moradorID: String, moradorName: String): Promise<Moradores>{
+        return await this.moradoresModel.findByIdAndUpdate({_id: moradorID}, {name: moradorName}, {new: true})
+        .populate({
+            path: 'residencia',
+            select: '-_id',
+            populate: {
+                path: 'moradores',
+                select: '-_id -residencia -encomendas'
+            }
+        })
+    }
+
+    async updateResidenciaMorador(moradorID: String, residenciaID: String): Promise<Moradores>{
+        return await this.moradoresModel.findOneAndUpdate({_id: moradorID}, {residencia: residenciaID}, {new: true})
+    }
+
+    async deleteMorador(moradorID: any): Promise<String>{
+        return await this.moradoresModel.findOneAndDelete({_id: moradorID});
     }
 }

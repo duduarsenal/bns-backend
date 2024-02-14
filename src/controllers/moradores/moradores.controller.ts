@@ -1,4 +1,4 @@
-import { Body, Controller, Get, Param, Post, Request, UnauthorizedException } from '@nestjs/common';
+import { Body, Controller, Delete, Get, Param, Patch, Post, Request, UnauthorizedException } from '@nestjs/common';
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { MoradoresDTO } from 'src/dto/moradores.dto';
 import { Moradores } from 'src/mongo/interfaces/moradores.interface';
@@ -35,7 +35,23 @@ export class MoradoresController {
   @Post('/create')
   async createMorador(@Body() newMorador: MoradoresDTO): Promise<Object> {
     const createdMorador = await this.moradoresService.createMorador(newMorador);
-
     if (createdMorador) return { message: 'Morador criado com sucesso' };
+  }
+
+  @Patch('/:moradorID')
+  async updateMorador(@Param() { moradorID }, @Body() moradorData: MoradoresDTO, @Request() req: Request): Promise<Moradores>{
+    const user = req['user'];
+    if (!user) throw new UnauthorizedException('Usuario não autorizado')
+
+    return await this.moradoresService.updateMorador(moradorID, moradorData)
+  }
+
+  @Delete('/:moradorID')
+  async deleteMorador(@Param() { moradorID }, @Request() req: Request):Promise<Object>{
+    const user = req['user'];
+    if (!user) throw new UnauthorizedException('Usuario não autorizado')
+
+    await this.moradoresService.deleteMorador(moradorID);
+    return { status: 200, error: false, message: 'Morador deletado do sistema com sucesso' }
   }
 }
