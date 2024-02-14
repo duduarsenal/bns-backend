@@ -4,7 +4,7 @@ import { MoradoresDTO } from 'src/dto/moradores.dto';
 import { Moradores } from 'src/mongo/interfaces/moradores.interface';
 import { MoradoresService } from 'src/services/moradores/moradores.service';
 
-@ApiTags('moradores')
+@ApiTags('Moradores')
 @Controller('moradores')
 export class MoradoresController {
   constructor(private readonly moradoresService: MoradoresService) {}
@@ -22,7 +22,7 @@ export class MoradoresController {
   @ApiParam({
     name: 'moradorID',
     type: 'string',
-})
+  })
   @Get('/:moradorID')
   async getMoradorById(@Param() { moradorID }, @Request() req: Request): Promise<Moradores> {
     const user = req['user'];
@@ -38,6 +38,10 @@ export class MoradoresController {
     if (createdMorador) return { message: 'Morador criado com sucesso' };
   }
 
+  @ApiParam({
+    name: 'moradorID',
+    type: 'string',
+  })
   @Patch('/:moradorID')
   async updateMorador(@Param() { moradorID }, @Body() moradorData: MoradoresDTO, @Request() req: Request): Promise<Moradores>{
     const user = req['user'];
@@ -46,6 +50,10 @@ export class MoradoresController {
     return await this.moradoresService.updateMorador(moradorID, moradorData)
   }
 
+  @ApiParam({
+    name: 'moradorID',
+    type: 'string',
+  })
   @Delete('/:moradorID')
   async deleteMorador(@Param() { moradorID }, @Request() req: Request):Promise<Object>{
     const user = req['user'];

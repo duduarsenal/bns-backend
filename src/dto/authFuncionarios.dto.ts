@@ -1,6 +1,6 @@
 import { IsEmail, IsNotEmpty } from 'class-validator';
 
-export class AuthEmployeeDTO {
+export class AuthFuncionariosDTO {
   @IsEmail(
     {
       host_whitelist: [

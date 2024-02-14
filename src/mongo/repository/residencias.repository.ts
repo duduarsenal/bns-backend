@@ -12,7 +12,7 @@ export class ResidenciasRepository {
   ) {}
 
   async getAllResidencias(): Promise<Residencias[]> {
-    return await this.residenciasModel.find().select('-_id').populate({
+    return await this.residenciasModel.find().populate({
       path: 'moradores',
       select: '-residencia',
     });
@@ -87,5 +87,9 @@ export class ResidenciasRepository {
 
   async createResidencia(newResidencia: ResidenciasDTO): Promise<Residencias> {
     return await this.residenciasModel.create(newResidencia);
+  }
+
+  async updateResidencia(residenciaID: String, residenciaData: Residencias): Promise<Residencias>{
+    return await this.residenciasModel.findOneAndUpdate({_id: residenciaID}, {...residenciaData}, {new: true})
   }
 }

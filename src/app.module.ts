@@ -11,20 +11,20 @@ import { JwtModule } from '@nestjs/jwt';
 import { AuthMiddleware } from './middlewares/auth.middleware';
 import { AuthAdminMiddleware } from './middlewares/admin.middleware';
 
-import { EmployeeController } from './controllers/employee/employee.controller';
-import { EmployeeService } from './services/employee/employee.service';
-import { EmployeeRepository } from './mongo/repository/employee.repository';
-import { EmployeeSchema } from './mongo/schemas/employee.schema';
+import { FuncionariosController } from './controllers/funcionarios/funcionarios.controller';
+import { FuncionariosService } from './services/funcionarios/Funcionarios.service';
+import { FuncionariosSchema } from './mongo/schemas/funcionarios.schema';
+import { FuncionariosRepository } from './mongo/repository/funcionarios.repository';
 
-import { MoradoresSchema } from './mongo/schemas/moradores.schema';
 import { MoradoresController } from './controllers/moradores/moradores.controller';
 import { MoradoresService } from './services/moradores/moradores.service';
+import { MoradoresSchema } from './mongo/schemas/moradores.schema';
 import { MoradoresRepository } from './mongo/repository/moradores.repository';
 
-import { ResidenciasService } from './services/residencias/residencias.service';
-import { ResidenciasRepository } from './mongo/repository/residencias.repository';
 import { ResidenciasController } from './controllers/residencias/residencias.controller';
+import { ResidenciasService } from './services/residencias/residencias.service';
 import { ResidenciasSchema } from './mongo/schemas/residencias.schema';
+import { ResidenciasRepository } from './mongo/repository/residencias.repository';
 
 @Module({
   imports: [
@@ -38,15 +38,15 @@ import { ResidenciasSchema } from './mongo/schemas/residencias.schema';
     }),
     MongooseModule.forRoot(process.env.DB_URI),
     MongooseModule.forFeature([
-      { name: 'employee', schema: EmployeeSchema },
+      { name: 'funcionarios', schema: FuncionariosSchema },
       { name: 'moradores', schema: MoradoresSchema },
       { name: 'residencias', schema: ResidenciasSchema },
     ]),
   ],
-  controllers: [EmployeeController, MoradoresController, ResidenciasController],
+  controllers: [FuncionariosController, MoradoresController, ResidenciasController],
   providers: [
-    EmployeeService,
-    EmployeeRepository,
+    FuncionariosService,
+    FuncionariosRepository,
     MoradoresService,
     MoradoresRepository,
     ResidenciasService,
@@ -58,13 +58,24 @@ export class AppModule implements NestModule {
     consumer
       .apply(AuthMiddleware) //Autenticação de NIVEL NORMAL
       .forRoutes(
-        { path: '/employee', method: RequestMethod.GET },
+        //Funcionarios
+        { path: '/funcionarios', method: RequestMethod.GET },
+        { path: '/funcionarios/:funcionarioID', method: RequestMethod.GET },
+        //Moradores
         { path: '/moradores', method: RequestMethod.GET },
         { path: '/moradores/:moradorID', method: RequestMethod.GET },
-        { path: '/moradores/:moradorID', method: RequestMethod.DELETE },
+        { path: '/moradores/create', method: RequestMethod.POST },
         { path: '/moradores/:moradorID', method: RequestMethod.PATCH },
+        { path: '/moradores/:moradorID', method: RequestMethod.DELETE },
+        //Residências
+        { path: '/residencias', method: RequestMethod.GET },
+        { path: '/residencias/filterby', method: RequestMethod.POST },
+        { path: '/residencias/:residenciaID', method: RequestMethod.PATCH }
       )
       .apply(AuthAdminMiddleware) //Autenticação de NIVEL ADMIN
-      .forRoutes({ path: '/employee/create', method: RequestMethod.POST });
+      .forRoutes(
+        { path: '/funcionarios/create', method: RequestMethod.POST },
+        { path: '/residencias/create', method: RequestMethod.POST },
+      );
   }
 }

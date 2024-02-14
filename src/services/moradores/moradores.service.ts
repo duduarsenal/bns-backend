@@ -98,6 +98,12 @@ export class MoradoresService {
             const existMorador = await this.moradoresRepository.getMoradorById(moradorID);
             if (!existMorador) throw new BadRequestException('Morador não existe no sistema')
 
+            const residenciaMorador = await this.residenciaRepository.getResidenciaById(existMorador.residencia.toString());
+            if (!residenciaMorador) throw new BadRequestException('Erro ao localizar residência do morador');
+            
+            const { apartamento, bloco, proprietario } = residenciaMorador;
+            await this.residenciaRepository.deleteMoradorFromResidencia({ apartamento, bloco, proprietario }, moradorID.toString())
+
             return await this.moradoresRepository.deleteMorador(moradorID);
         } catch (error) {
             console.log(error)

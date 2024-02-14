@@ -1,7 +1,7 @@
 import { ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsNotEmpty, IsString, IsStrongPassword, MaxLength, MinLength } from "class-validator";
 
-export class EmployeeDTO{
+export class FuncionariosDTO{
 
     @IsNotEmpty({ message: 'Item não pode ser vazio' })
     @IsString({ message: 'Formato de email inválido' })

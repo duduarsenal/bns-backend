@@ -50,4 +50,16 @@ export class ResidenciasService {
         }
     }
 
+    async updateResidencia(residenciaID: String, residenciaData: Residencias): Promise<Residencias>{
+        try {
+            const existResidencia = await this.residenciasRepository.getResidenciaById(residenciaID)
+            if(!existResidencia) throw new BadRequestException('Residência não está cadastrada no sistema')
+
+            return await this.residenciasRepository.updateResidencia(residenciaID, residenciaData);
+        } catch (error) {
+            console.log(error.message)
+            throw new BadRequestException(error.message || 'Erro ao atualizar residência')
+        }
+    }
+
 }
