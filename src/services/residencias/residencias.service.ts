@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { ResidenciasDTO } from 'src/dto/residencias.dto';
+import { ResidenciasDTO, updateResidenciaDTO } from 'src/dto/residencias.dto';
 import { Residencias } from 'src/mongo/interfaces/residencias.interface';
 import { ResidenciasRepository } from 'src/mongo/repository/residencias.repository';
 
@@ -50,7 +50,7 @@ export class ResidenciasService {
         }
     }
 
-    async updateResidencia(residenciaID: String, residenciaData: Residencias): Promise<Residencias>{
+    async updateResidencia(residenciaID: String, residenciaData: updateResidenciaDTO): Promise<Residencias>{
         try {
             const existResidencia = await this.residenciasRepository.getResidenciaById(residenciaID)
             if(!existResidencia) throw new BadRequestException('Residência não está cadastrada no sistema')

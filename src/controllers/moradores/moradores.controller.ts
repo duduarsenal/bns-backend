@@ -1,5 +1,5 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post, Request, UnauthorizedException } from '@nestjs/common';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
 import { MoradoresDTO } from 'src/dto/moradores.dto';
 import { Moradores } from 'src/mongo/interfaces/moradores.interface';
 import { MoradoresService } from 'src/services/moradores/moradores.service';
@@ -11,6 +11,7 @@ export class MoradoresController {
 
   //Rota para listar todos os moradores do sistema
   @Get('/')
+  @ApiBearerAuth('access-token')
   async getMoradores(@Request() req: Request): Promise<Moradores[]> {
     const user = req['user'];
     if (!user) throw new UnauthorizedException('Usuario não autorizado');
@@ -35,7 +36,7 @@ export class MoradoresController {
   @Post('/create')
   async createMorador(@Body() newMorador: MoradoresDTO): Promise<Object> {
     const createdMorador = await this.moradoresService.createMorador(newMorador);
-    if (createdMorador) return { message: 'Morador criado com sucesso' };
+    if (createdMorador) return { status: 200, error: false, message: 'Morador criado com sucesso' };
   }
 
   @ApiParam({
@@ -43,19 +44,12 @@ export class MoradoresController {
     type: 'string',
   })
   @Patch('/:moradorID')
-  async updateMorador(@Param() { moradorID }, @Body() moradorData: MoradoresDTO, @Request() req: Request): Promise<Moradores>{
-    const user = req['user'];
-    if (!user) throw new UnauthorizedException('Usuario não autorizado')
-
+  async updateMorador(@Param('moradorID') moradorID, @Body() moradorData: MoradoresDTO): Promise<Moradores>{
     return await this.moradoresService.updateMorador(moradorID, moradorData)
   }
 
-  @ApiParam({
-    name: 'moradorID',
-    type: 'string',
-  })
   @Delete('/:moradorID')
-  async deleteMorador(@Param() { moradorID }, @Request() req: Request):Promise<Object>{
+  async deleteMorador(@Param('moradorID') moradorID: string, @Request() req: Request):Promise<Object>{
     const user = req['user'];
     if (!user) throw new UnauthorizedException('Usuario não autorizado')
 

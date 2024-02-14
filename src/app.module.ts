@@ -26,6 +26,11 @@ import { ResidenciasService } from './services/residencias/residencias.service';
 import { ResidenciasSchema } from './mongo/schemas/residencias.schema';
 import { ResidenciasRepository } from './mongo/repository/residencias.repository';
 
+import { EncomendasSchema } from './mongo/schemas/encomendas.schema';
+import { EncomendasController } from './controllers/encomendas/encomendas.controller';
+import { EncomendasService } from './services/encomendas/encomendas.service';
+import { EncomendasRepository } from './mongo/repository/encomendas.repository';
+
 @Module({
   imports: [
     ConfigModule.forRoot({
@@ -41,9 +46,10 @@ import { ResidenciasRepository } from './mongo/repository/residencias.repository
       { name: 'funcionarios', schema: FuncionariosSchema },
       { name: 'moradores', schema: MoradoresSchema },
       { name: 'residencias', schema: ResidenciasSchema },
+      { name: 'encomendas', schema: EncomendasSchema },
     ]),
   ],
-  controllers: [FuncionariosController, MoradoresController, ResidenciasController],
+  controllers: [FuncionariosController, MoradoresController, ResidenciasController, EncomendasController],
   providers: [
     FuncionariosService,
     FuncionariosRepository,
@@ -51,6 +57,8 @@ import { ResidenciasRepository } from './mongo/repository/residencias.repository
     MoradoresRepository,
     ResidenciasService,
     ResidenciasRepository,
+    EncomendasService,
+    EncomendasRepository
   ],
 })
 export class AppModule implements NestModule {
@@ -70,11 +78,17 @@ export class AppModule implements NestModule {
         //Residências
         { path: '/residencias', method: RequestMethod.GET },
         { path: '/residencias/filterby', method: RequestMethod.POST },
-        { path: '/residencias/:residenciaID', method: RequestMethod.PATCH }
+        { path: '/residencias/:residenciaID', method: RequestMethod.PATCH },
+        //Encomendas
+        { path: '/encomendas', method: RequestMethod.GET },
+        { path: '/encomendas/:encomendaID', method: RequestMethod.GET },
+        { path: '/encomendas/create', method: RequestMethod.POST },
+        { path: '/encomendas/:encomendaID', method: RequestMethod.PATCH },
+        { path: '/encomendas/:encomendaID', method: RequestMethod.DELETE },
       )
       .apply(AuthAdminMiddleware) //Autenticação de NIVEL ADMIN
       .forRoutes(
-        { path: '/funcionarios/create', method: RequestMethod.POST },
+        // { path: '/funcionarios/create', method: RequestMethod.POST },
         { path: '/residencias/create', method: RequestMethod.POST },
       );
   }

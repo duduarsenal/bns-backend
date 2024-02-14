@@ -22,13 +22,8 @@ export class FuncionariosController {
     }
 
     //Rota de Informações do perfil do funcionario
-    @ApiParam({
-        name: 'funcionariosID',
-        type: 'string',
-    })
     @Get('/:funcionariosID')
-    async getFuncionarioById(@Param() { funcionariosID }): Promise<FuncionariosDTO>{
-        if (!funcionariosID) throw new BadRequestException('Nenhum ID informado')
+    async getFuncionarioById(@Param('funcionariosID') funcionariosID: string): Promise<FuncionariosDTO>{
         return await this.funcionariosService.getFuncionarioById(funcionariosID);
     }
 
@@ -42,7 +37,6 @@ export class FuncionariosController {
     @Post('/create')
     async createFuncionario(@Body() newFuncionario: FuncionariosDTO): Promise<Object>{
         const createdFuncionario = await this.funcionariosService.createFuncionario(newFuncionario);
-
-        if(createdFuncionario) return {message: 'Funcionario criado com sucesso'}
+        if(createdFuncionario) return { status: 200, error: false, message: 'Funcionario criado com sucesso'}
     }
 }

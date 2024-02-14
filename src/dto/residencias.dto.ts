@@ -8,7 +8,7 @@ import {
   } from 'class-validator';
 import { MoradoresDTO } from './moradores.dto';
 import { Type } from 'class-transformer';
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiProperty, PartialType } from '@nestjs/swagger';
   
   export class ResidenciasDTO {
     @IsNotEmpty({ message: 'Item não pode ser vazio' })
@@ -51,3 +51,4 @@ import { ApiProperty } from '@nestjs/swagger';
     readonly moradores?: MoradoresDTO[]
   }
   
+  export class updateResidenciaDTO extends PartialType(ResidenciasDTO) {}

@@ -1,10 +1,9 @@
-import * as mongoose from 'mongoose';
-import { EncomendasDTO } from "src/dto/encomendas.dto";
+import { Schema, Document } from 'mongoose';
 
-export interface Moradores extends mongoose.Document {
+export interface Moradores extends Document {
 
-    readonly id: mongoose.Schema.Types.ObjectId;
+    readonly id: Schema.Types.ObjectId;
     readonly name: string;
-    readonly residencia: mongoose.Schema.Types.ObjectId;
-    readonly encomendas?: EncomendasDTO[];
+    readonly residencia: Schema.Types.ObjectId;
+    readonly encomendas?: Schema.Types.ObjectId[];
 }

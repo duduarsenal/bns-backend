@@ -1,6 +1,6 @@
-import { BadRequestException, Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
-import { ApiParam, ApiTags } from '@nestjs/swagger';
-import { ResidenciasDTO } from 'src/dto/residencias.dto';
+import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
+import { ResidenciasDTO, updateResidenciaDTO } from 'src/dto/residencias.dto';
 import { Residencias } from 'src/mongo/interfaces/residencias.interface';
 import { ResidenciasService } from 'src/services/residencias/residencias.service';
 
@@ -29,13 +29,8 @@ export class ResidenciasController {
         if (createdResidencia) return { status: 200, error: false, message: 'Residencia criada com sucesso' };
     }
 
-    @ApiParam({
-        name: 'residenciaID',
-        type: 'string',
-    })
     @Patch('/:residenciaID')
-    async updateResidencia(@Param() { residenciaID }, @Body() residenciaData: Residencias): Promise<Residencias>{
-        if (!residenciaID) throw new BadRequestException('ResidenciaID não pode ser vazio')
+    async updateResidencia(@Param('residenciaID') residenciaID: string, @Body() residenciaData: updateResidenciaDTO): Promise<Residencias>{
         return await this.residenciaService.updateResidencia(residenciaID, residenciaData);
     }
 

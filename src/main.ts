@@ -12,6 +12,8 @@ async function bootstrap() {
     'Aplicação feita para gerenciar encomendas dos condominios/prédios',
   )
   .setVersion('1.0')
+  // .addApiKey({})
+  .addBearerAuth({type: 'http', description: 'Autorização para acessar as rotas do sistema'},'access-token')
   .build();
 
   const document = SwaggerModule.createDocument(app, config);
