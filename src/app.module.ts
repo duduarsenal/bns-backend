@@ -12,7 +12,7 @@ import { AuthMiddleware } from './middlewares/auth.middleware';
 import { AuthAdminMiddleware } from './middlewares/admin.middleware';
 
 import { FuncionariosController } from './controllers/funcionarios/funcionarios.controller';
-import { FuncionariosService } from './services/funcionarios/Funcionarios.service';
+import { FuncionariosService } from './services/funcionarios/funcionarios.service';
 import { FuncionariosSchema } from './mongo/schemas/funcionarios.schema';
 import { FuncionariosRepository } from './mongo/repository/funcionarios.repository';
 

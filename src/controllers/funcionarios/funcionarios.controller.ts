@@ -2,7 +2,7 @@ import { Body, Controller, Get, Request, Post, UnauthorizedException, Param, Bad
 import { ApiParam, ApiTags } from '@nestjs/swagger';
 import { AuthFuncionariosDTO } from 'src/dto/authFuncionarios.dto';
 import { FuncionariosDTO } from 'src/dto/funcionarios.dto';
-import { FuncionariosService } from 'src/services/funcionarios/Funcionarios.service';
+import { FuncionariosService } from 'src/services/funcionarios/funcionarios.service';
 
 @ApiTags('Funcionarios')
 @Controller('funcionarios')
