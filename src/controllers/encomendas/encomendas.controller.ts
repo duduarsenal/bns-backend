@@ -23,7 +23,7 @@ export class EncomendasController {
     }
 
     @Post('/create')
-    async createEncomenda(@Body() newEncomenda: EncomendasDTO): Promise<Object>{
+    async createEncomenda(@Body() newEncomenda: EncomendasDTO): Promise<object>{
         const payload = {
             destinatario: newEncomenda.destinatario,
             residencia: newEncomenda.residencia,
@@ -43,7 +43,7 @@ export class EncomendasController {
     }
 
     @Delete('/:encomendaID')
-    async deleteEncomenda(@Param('encomendaID') encomendaID: string): Promise<Object>{
+    async deleteEncomenda(@Param('encomendaID') encomendaID: string): Promise<object>{
         await this.encomendasService.deleteEncomenda(encomendaID);
         return { status: 200, error: false, message: 'Encomenda excluida com sucesso' };
     }

@@ -1,11 +1,11 @@
-import { ApiProperty } from "@nestjs/swagger";
+import { ApiHideProperty, ApiProperty } from "@nestjs/swagger";
 import { IsEmail, IsNotEmpty, IsString, IsStrongPassword, MaxLength, MinLength } from "class-validator";
 
 export class FuncionariosDTO{
 
     @IsNotEmpty({ message: 'Item não pode ser vazio' })
     @IsString({ message: 'Formato de email inválido' })
-    @MinLength(2, { message: 'Nome não pode ser menor que $constraint1 caracteres' })
+    @MinLength(3, { message: 'Nome não pode ser menor que $constraint1 caracteres' })
     @MaxLength(100, { message: 'Nome não pode ultrapassar $constraint1 caracteres' })
     @ApiProperty({
         example: 'José Souza',
@@ -14,13 +14,15 @@ export class FuncionariosDTO{
     readonly name: string;
 
     @IsNotEmpty({ message: 'Item não pode ser vazio' })
-    @IsEmail({host_whitelist: ['gmail.com', 'hotmai.com', 'outlook.com', 'yahoo.com', 'live.com']}, {message: 'Email no formato inválido'})
+    @IsString({message: 'Senha precisa ser um texto'})
+    @IsEmail({host_whitelist: ['gmail.com', 'hotmai.com']}, {message: 'Email no formato inválido'})
     @ApiProperty({
         example: 'email@gmail.com',
         description: `O e-mail é necessário para o login e identificação do funcionario`,
     })
     readonly email: string;
 
+    @IsString({message: 'Senha precisa ser um texto'})
     @IsStrongPassword({minLength: 8}, {message: 'Senha não é forte suficiente, minimo 8 caracteres, 1 letra maiuscula, 1 numero e 1 caracter especial'})
     @ApiProperty({
         example: 'senhaforte123@',
@@ -30,9 +32,6 @@ export class FuncionariosDTO{
 
     @IsNotEmpty({ message: 'Item não pode ser vazio' })
     @IsString({message: 'Permissão deve ser preenchida corretamente'})
-    @ApiProperty({
-        example: 'adm',
-        description: `Permissão necessaria para validar o nivel de acesso do usuario no sistema`,
-    })
+    @ApiHideProperty()
     readonly permission: string;
 }

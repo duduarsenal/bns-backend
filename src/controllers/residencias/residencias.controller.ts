@@ -23,9 +23,8 @@ export class ResidenciasController {
     }
 
     @Post('/create')
-    async createResidencia(@Body() newResidencia: ResidenciasDTO): Promise<Object>{
+    async createResidencia(@Body() newResidencia: ResidenciasDTO): Promise<object>{
         const createdResidencia = await this.residenciaService.createResidencia(newResidencia);
-
         if (createdResidencia) return { status: 200, error: false, message: 'Residencia criada com sucesso' };
     }
 

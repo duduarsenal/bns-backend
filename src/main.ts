@@ -9,15 +9,14 @@ async function bootstrap() {
   const config = new DocumentBuilder()
   .setTitle('Bossa Nova Stay')
   .setDescription(
-    'Aplicação feita para gerenciar encomendas dos condominios/prédios',
+    'Aplicativo para gerenciar encomendas em prédios/condomínios, permitindo armazenar dados de entregas, status de retirada e informações dos moradores, incluindo histórico de encomendas anteriores.',
   )
   .setVersion('1.0')
-  // .addApiKey({})
-  .addBearerAuth({type: 'http', description: 'Autorização para acessar as rotas do sistema'},'access-token')
+  .addBearerAuth({type: 'http', description: 'Autorização para acessar as rotas do sistema'}, 'access-token')
   .build();
 
   const document = SwaggerModule.createDocument(app, config);
-  SwaggerModule.setup('swagger', app, document);
+  SwaggerModule.setup('/api/swagger', app, document);
 
   //Usar os validadores em todo nosso app
   app.useGlobalPipes(new ValidationPipe());

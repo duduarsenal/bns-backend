@@ -12,7 +12,8 @@ export class ResidenciasService {
 
     async getAllResidencias(): Promise<Residencias[]>{
         try {
-            return await this.residenciasRepository.getAllResidencias();
+            const allResidencias = await this.residenciasRepository.getAllResidencias();
+            return allResidencias || [];
         } catch (error) {
             console.log(error)
             throw new BadRequestException(error.message || 'Erro ao buscar todas as residências')
@@ -23,7 +24,7 @@ export class ResidenciasService {
 
         try {
             const residencia = await this.residenciasRepository.getResidenciaByFilter(residenciaData);
-            if (!residencia) throw new BadRequestException('Nenhuma residência encontrada');
+            if (!residencia) throw new BadRequestException('Residência não encontrada');
 
             return residencia;
         } catch (error) {
@@ -34,26 +35,20 @@ export class ResidenciasService {
 
     async createResidencia(newResidencia: ResidenciasDTO): Promise<Residencias>{
         try {
-            
-            const existResidencia = await this.residenciasRepository.getResidenciaByFilter({
-                apartamento: newResidencia.apartamento,
-                bloco: newResidencia.bloco,
-                proprietario: newResidencia.proprietario,
-            });
-            
+            const existResidencia = await this.residenciasRepository.getResidenciaByFilter({...newResidencia});
             if (existResidencia) throw new BadRequestException('Residência já cadastrada');
             
             return await this.residenciasRepository.createResidencia(newResidencia);
         } catch (error) {
             console.log(error)
-            throw new BadRequestException(error.message || 'Erro ao criar nova residência')
+            throw new BadRequestException(error.message || 'Erro ao criar nova residência');
         }
     }
 
-    async updateResidencia(residenciaID: String, residenciaData: updateResidenciaDTO): Promise<Residencias>{
+    async updateResidencia(residenciaID: string, residenciaData: updateResidenciaDTO): Promise<Residencias>{
         try {
             const existResidencia = await this.residenciasRepository.getResidenciaById(residenciaID)
-            if(!existResidencia) throw new BadRequestException('Residência não está cadastrada no sistema')
+            if(!existResidencia) throw new BadRequestException('Residência não encontrada')
 
             return await this.residenciasRepository.updateResidencia(residenciaID, residenciaData);
         } catch (error) {

@@ -21,9 +21,13 @@ export class FuncionariosRepository{
         return await this.funcionariosModel.findById({_id: funcionariosID}).select('-permission');
     }
 
+    async getFuncionarioByFilter(funcionarioEmail: string): Promise<Funcionarios>{
+        return await this.funcionariosModel.findOne({email: funcionarioEmail});
+    }
+
     async authFuncionario(funcionarioData: AuthFuncionariosDTO): Promise<Funcionarios>{
         const user = await this.funcionariosModel.findOne({email: funcionarioData.email}).select('+password');
-        if (!user) throw new BadRequestException('Usuario não existe');
+        if (!user) throw new BadRequestException('Usuario não encontrado');
 
         const matchPassword = await bcrypt.compare(funcionarioData.password, user.password);
         if (!matchPassword) throw new UnauthorizedException('Usuario ou senha incorretos');

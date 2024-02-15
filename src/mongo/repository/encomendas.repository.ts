@@ -19,20 +19,29 @@ export class EncomendasRepository{
             })
     }
 
-    async getEncomendaById(encomendaID: String): Promise<Encomendas>{
-        return await this.encomendasModel.findById({_id: encomendaID});
+    async getEncomendaById(encomendaID: string): Promise<Encomendas>{
+        return await this.encomendasModel.findById({_id: encomendaID})
+            .populate({
+                path: 'destinatario residencia'
+            })
     }
 
     async createEncomenda(newEncomenda: EncomendasDTO): Promise<Encomendas>{
-        return await this.encomendasModel.create(newEncomenda);
+        return (await this.encomendasModel.create(newEncomenda))
+            .populate({
+                path: 'destinatario residencia'
+            })
     }
 
-    async updateEncomenda(encomendaID: String, encomendaData: updateEncomendaDTO): Promise<Encomendas>{
+    async updateEncomenda(encomendaID: string, encomendaData: updateEncomendaDTO): Promise<Encomendas>{
         return await this.encomendasModel.findOneAndUpdate(
             {_id: encomendaID},
             {...encomendaData},
             {new: true}
             )
+            .populate({
+                path: 'destinatario residencia'
+            })
     }
 
     async deleteEncomenda(encomendaID: string): Promise<void>{

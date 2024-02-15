@@ -11,48 +11,32 @@ export class MoradoresController {
 
   //Rota para listar todos os moradores do sistema
   @Get('/')
-  @ApiBearerAuth('access-token')
-  async getMoradores(@Request() req: Request): Promise<Moradores[]> {
-    const user = req['user'];
-    if (!user) throw new UnauthorizedException('Usuario não autorizado');
-
+  async getMoradores(): Promise<Moradores[]> {
     return await this.moradoresService.getMoradores();
   }
 
   //Rota de Informações do perfil do morador
-  @ApiParam({
-    name: 'moradorID',
-    type: 'string',
-  })
   @Get('/:moradorID')
-  async getMoradorById(@Param() { moradorID }, @Request() req: Request): Promise<Moradores> {
-    const user = req['user'];
-    if (!user) throw new UnauthorizedException('Usuario não autorizado')
-
+  async getMoradorById(@Param('moradorID') moradorID: string): Promise<Moradores> {
     return await this.moradoresService.getMoradorById(moradorID);
   }
 
-  //Rota para criar novos funcionarios
+  //Rota para criar novos moradores
   @Post('/create')
-  async createMorador(@Body() newMorador: MoradoresDTO): Promise<Object> {
+  async createMorador(@Body() newMorador: MoradoresDTO): Promise<object> {
     const createdMorador = await this.moradoresService.createMorador(newMorador);
     if (createdMorador) return { status: 200, error: false, message: 'Morador criado com sucesso' };
   }
 
-  @ApiParam({
-    name: 'moradorID',
-    type: 'string',
-  })
+  //Rota para atualizar as informações de algum morador
   @Patch('/:moradorID')
-  async updateMorador(@Param('moradorID') moradorID, @Body() moradorData: MoradoresDTO): Promise<Moradores>{
+  async updateMorador(@Param('moradorID') moradorID: string, @Body() moradorData: MoradoresDTO): Promise<Moradores>{
     return await this.moradoresService.updateMorador(moradorID, moradorData)
   }
 
+  //Rota para deletar algum morador do sistema
   @Delete('/:moradorID')
-  async deleteMorador(@Param('moradorID') moradorID: string, @Request() req: Request):Promise<Object>{
-    const user = req['user'];
-    if (!user) throw new UnauthorizedException('Usuario não autorizado')
-
+  async deleteMorador(@Param('moradorID') moradorID: string): Promise<object>{
     await this.moradoresService.deleteMorador(moradorID);
     return { status: 200, error: false, message: 'Morador deletado do sistema com sucesso' }
   }

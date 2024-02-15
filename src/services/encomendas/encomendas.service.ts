@@ -13,32 +13,29 @@ export class EncomendasService {
     async getAllEncomendas(): Promise<Encomendas[]>{
         try {
             const allEncomendas = await this.encomendasRepository.getAllEncomendas();
-
             return allEncomendas || [];
         } catch (error) {
             console.log(error.message)
             throw new BadRequestException(error.message || 'Erro ao buscar encomendas')
         }
-
     }
     
     async getEncomendaById(encomendaID: string): Promise<Encomendas>{
         try {
             const existEncomenda = await this.encomendasRepository.getEncomendaById(encomendaID)
-            if(!existEncomenda) throw new BadRequestException('Encomenda não existe')
+            if(!existEncomenda) throw new BadRequestException('Encomenda não encontrada')
 
             return existEncomenda;
         } catch (error) {
-            console.log(error.message || 'Erro ao buscar Encomenda pelo ID')
+            console.log(error.message)
+            throw new BadRequestException(error.message || 'Erro ao buscar Encomenda pelo ID');
         }
     }
 
     async createEncomenda(newEncomenda: EncomendasDTO): Promise<Encomendas>{
         try {
-            // const { destinatario, residencia } = newEncomenda;
-
             const createdEncomenda = await this.encomendasRepository.createEncomenda(newEncomenda);
-            if(!createdEncomenda) throw new BadRequestException('Erro ao criar encomenda')
+            if(!createdEncomenda) throw new BadRequestException('Falha ao criar Nova Encomenda');
             
             return createdEncomenda;
         } catch (error) {
@@ -49,20 +46,20 @@ export class EncomendasService {
 
     async updateEncomenda(encomendaID: string, encomendaData: updateEncomendaDTO): Promise<Encomendas>{
         try {
-            const existEncomenda = await this.encomendasRepository.getEncomendaById(encomendaID)
-            if(!existEncomenda) throw new BadRequestException('Encomenda não existe')
+            const existEncomenda = await this.encomendasRepository.getEncomendaById(encomendaID);
+            if(!existEncomenda) throw new BadRequestException('Encomenda não encontrada');
 
             return await this.encomendasRepository.updateEncomenda(encomendaID, encomendaData);
         } catch (error) {
             console.log(error.message)
-            throw new BadRequestException(error.message || 'Erro ao atualizar encomenda')
+            throw new BadRequestException(error.message || 'Erro ao atualizar encomenda');
         }
     }
 
     async deleteEncomenda(encomendaID: string): Promise<void>{
         try {
             const encomendaToDel = await this.encomendasRepository.getEncomendaById(encomendaID);
-            if(!encomendaToDel) throw new BadRequestException('Encomenda não cadastrada no sistema')
+            if(!encomendaToDel) throw new BadRequestException('Encomenda não encontrada')
 
             await this.encomendasRepository.deleteEncomenda(encomendaID);
         } catch (error) {

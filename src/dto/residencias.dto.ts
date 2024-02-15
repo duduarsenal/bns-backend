@@ -8,17 +8,13 @@ import {
   } from 'class-validator';
 import { MoradoresDTO } from './moradores.dto';
 import { Type } from 'class-transformer';
-import { ApiProperty, PartialType } from '@nestjs/swagger';
+import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
   
   export class ResidenciasDTO {
     @IsNotEmpty({ message: 'Item não pode ser vazio' })
     @IsString({ message: 'Formato de email inválido' })
-    @MinLength(1, {
-      message: 'Bloco não pode ser menor que $constraint1 caracteres',
-    })
-    @MaxLength(1, {
-      message: 'Bloco não pode ultrapassar $constraint1 caracteres',
-    })
+    @MinLength(1, { message: 'Bloco não pode ser menor que $constraint1 caracteres' })
+    @MaxLength(1, { message: 'Bloco não pode ultrapassar $constraint1 caracteres' })
     @ApiProperty({
       example: 'A',
       description: `Letra do Bloco para identificar a residência`,
@@ -46,8 +42,13 @@ import { ApiProperty, PartialType } from '@nestjs/swagger';
     })
     readonly proprietario: string;
 
+    @IsString({message: 'ID do morado deve ser um texto'})
     @Type(() => MoradoresDTO)
     @ValidateNested({each: true})
+    @ApiPropertyOptional({
+      examples: ['moradorID1', 'moradorID2'],
+      description: `Os dados do morador serão utilizados para relacionar o morador com a residencia em questão`,
+    })
     readonly moradores?: MoradoresDTO[]
   }
   

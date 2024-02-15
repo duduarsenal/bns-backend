@@ -12,14 +12,19 @@ export class ResidenciasRepository {
   ) {}
 
   async getAllResidencias(): Promise<Residencias[]> {
-    return await this.residenciasModel.find().populate({
-      path: 'moradores',
-      select: '-residencia',
-    });
+    return await this.residenciasModel.find()
+        .populate({
+          path: 'moradores',
+          select: '-residencia',
+        });
   }
 
   async getResidenciaById(residenciaID: String): Promise<Residencias> {
-    return await this.residenciasModel.findById({ _id: residenciaID });
+    return await this.residenciasModel.findById({ _id: residenciaID })
+        .populate({
+          path: 'moradores',
+          select: '-residencia',
+        });
   }
 
   async getResidenciaByFilter(
@@ -39,7 +44,7 @@ export class ResidenciasRepository {
 
   async addMoradorToResidencia(
     residencia: ResidenciasDTO,
-    moradorID: mongoose.Schema.Types.ObjectId,
+    moradorID: string,
   ): Promise<void> {
     const res = await this.residenciasModel.findOne({
       apartamento: residencia.apartamento,
@@ -47,7 +52,7 @@ export class ResidenciasRepository {
       proprietario: residencia.proprietario,
     });
 
-    const listaMoradores = [...res.moradores];
+    const listaMoradores = [...res.moradores.map((morador) => { return morador.toString() })];
     !listaMoradores.includes(moradorID) && listaMoradores.push(moradorID);
 
     await this.residenciasModel.findOneAndUpdate(
@@ -89,7 +94,7 @@ export class ResidenciasRepository {
     return await this.residenciasModel.create(newResidencia);
   }
 
-  async updateResidencia(residenciaID: String, residenciaData: updateResidenciaDTO): Promise<Residencias>{
+  async updateResidencia(residenciaID: string, residenciaData: updateResidenciaDTO): Promise<Residencias>{
     return await this.residenciasModel.findOneAndUpdate({_id: residenciaID}, {...residenciaData}, {new: true})
   }
 }

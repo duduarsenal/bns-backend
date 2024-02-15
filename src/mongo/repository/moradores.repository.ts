@@ -15,7 +15,7 @@ export class MoradoresRepository{
     async getMoradores(): Promise<Moradores[]>{
         return await this.moradoresModel.find()
         .populate({
-            path: 'residencia',
+            path: 'residencia encomendas',
             select: '-_id',
             populate: {
                 path: 'moradores',
@@ -26,33 +26,65 @@ export class MoradoresRepository{
 
     async getMoradorByFilter(moradorData: MoradoresDTO, residenciaID: string): Promise<Moradores>{
         return await this.moradoresModel.findOne({name: moradorData.name, residencia: residenciaID})
+            .populate({
+                path: 'residencia encomendas',
+                select: '-_id',
+                populate: {
+                    path: 'moradores',
+                    select: '-_id -residencia -encomendas'
+                }
+            })
     }
 
-    async getMoradorById(moradorID: String): Promise<Moradores>{
-        return await this.moradoresModel.findById({_id: moradorID}).select('-permission');
+    async getMoradorById(moradorID: string): Promise<Moradores>{
+        return await this.moradoresModel.findById({_id: moradorID}).select('-permission')
+            .populate({
+                path: 'residencia encomendas',
+                select: '-_id',
+                populate: {
+                    path: 'moradores',
+                    select: '-_id -residencia -encomendas'
+                }
+            });
     }
     
     async createMorador(newMorador: MoradoresDTO, residenciaMorador: Residencias): Promise<Moradores>{
-        return await this.moradoresModel.create({name: newMorador.name, residencia: residenciaMorador});
+        return (await this.moradoresModel.create({name: newMorador.name, residencia: residenciaMorador}))
+            .populate({
+                path: 'residencia encomendas',
+                select: '-_id',
+                populate: {
+                    path: 'moradores',
+                    select: '-_id -residencia -encomendas'
+                }
+            });
     }
 
-    async updateMorador(moradorID: String, moradorName: String): Promise<Moradores>{
+    async updateMorador(moradorID: string, moradorName: string): Promise<Moradores>{
         return await this.moradoresModel.findByIdAndUpdate({_id: moradorID}, {name: moradorName}, {new: true})
-        .populate({
-            path: 'residencia',
-            select: '-_id',
-            populate: {
-                path: 'moradores',
-                select: '-_id -residencia -encomendas'
-            }
-        })
+            .populate({
+                path: 'residencia encomendas',
+                select: '-_id',
+                populate: {
+                    path: 'moradores',
+                    select: '-_id -residencia -encomendas'
+                }
+            })
     }
 
-    async updateResidenciaMorador(moradorID: String, residenciaID: String): Promise<Moradores>{
+    async updateResidenciaMorador(moradorID: string, residenciaID: string): Promise<Moradores>{
         return await this.moradoresModel.findOneAndUpdate({_id: moradorID}, {residencia: residenciaID}, {new: true})
+            .populate({
+                path: 'residencia encomendas',
+                select: '-_id',
+                populate: {
+                    path: 'moradores',
+                    select: '-_id -residencia -encomendas'
+                }
+            })
     }
 
-    async deleteMorador(moradorID: any): Promise<String>{
+    async deleteMorador(moradorID: any): Promise<string>{
         return await this.moradoresModel.findOneAndDelete({_id: moradorID});
     }
 }

@@ -17,30 +17,29 @@ export class FuncionariosService {
     async getFuncionarios(): Promise<Funcionarios[]>{
         try{
             const allFuncionarioss = await this.funcionariosRepository.getFuncionarios();
-
             return allFuncionarioss || [];
-        } catch (err) {
-            console.error(err)
-            throw new BadRequestException(err.message || 'Erro ao buscar todos os funcionarios');
+        } catch (error) {
+            console.error(error)
+            throw new BadRequestException(error.message || 'Erro ao buscar todos os funcionarios');
         }
     }
 
     async getFuncionarioById(funcionarioID: string): Promise<Funcionarios>{
         try {
             const user = await this.funcionariosRepository.getFuncionarioById(funcionarioID);
-    
             if (!user) throw new BadRequestException('Usuario não encontrado');
     
             return user;
         } catch (error) {
-            throw new BadRequestException('Erro na busca pelo usuario')
+            console.error(error)
+            throw new BadRequestException(error.message || 'Erro na busca pelo usuario')
         }
     }
 
     async authFuncionario(funcionarioData: AuthFuncionariosDTO): Promise<{ access_token: string }>{
         try {
             const existFuncionario = await this.funcionariosRepository.authFuncionario(funcionarioData);
-            if (!existFuncionario) throw new BadRequestException('Funcionario não existe');
+            if (!existFuncionario) throw new BadRequestException('Funcionario não encontrado');
 
             //CRIPTOGRAFAR E OCULTAR SENHA DO USUARIO
             const payload = {
@@ -51,35 +50,34 @@ export class FuncionariosService {
             }
 
             const token = await this.jwtService.signAsync(payload);
-
             if (!token) throw new UnauthorizedException('Falha ao gerar token');
 
-            return {
-                access_token: token
-            };
+            return { access_token: token }
         } catch (error) {
-            throw new BadRequestException(error.message || 'Funcionario não existe')
+            console.error(error)
+            throw new BadRequestException(error.message || 'Erro na autenticação do funcionario')
         }
     }
 
     async createFuncionario(newFuncionario: FuncionariosDTO): Promise<Funcionarios>{
         try {
+            const existFuncionario = await this.funcionariosRepository.getFuncionarioByFilter(newFuncionario.email)
+            if(existFuncionario) throw new BadRequestException('Funcionario já cadastrado no sistema');
 
-            const { name, email, password, permission } = newFuncionario;
-            const hashPassword = await bcrypt.hash(password, 12);
+            const hashPassword = await bcrypt.hash(newFuncionario.password, 12);
             const payload = {
-                name,
-                email,
+                name: newFuncionario.name,
+                email: newFuncionario.email,
                 password: hashPassword,
-                permission
+                permission: newFuncionario.permission
             }
             
             const createdFuncionario = await this.funcionariosRepository.createFuncionario(payload)
-
             if (!createdFuncionario) throw new BadRequestException('Erro ao criar um funcionario')
 
             return createdFuncionario;
         } catch (error) {
+            console.log(error.message)
             throw new BadRequestException(error.message || 'Erro ao criar um funcionario')
         }
     }

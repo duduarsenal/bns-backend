@@ -14,7 +14,7 @@ export class FuncionariosController {
 
     //Rota para listar todos os funcionarios do sistema
     @Get('/')
-    async getFuncionarioss(@Request() req: Request): Promise<FuncionariosDTO[]>{
+    async getFuncionarios(@Request() req: Request): Promise<FuncionariosDTO[]>{
         const user = req['user'];
         if (!user) throw new UnauthorizedException('Usuario não autorizado');
 
@@ -35,7 +35,7 @@ export class FuncionariosController {
 
     //Rota para criar novos funcionarios
     @Post('/create')
-    async createFuncionario(@Body() newFuncionario: FuncionariosDTO): Promise<Object>{
+    async createFuncionario(@Body() newFuncionario: FuncionariosDTO): Promise<object>{
         const createdFuncionario = await this.funcionariosService.createFuncionario(newFuncionario);
         if(createdFuncionario) return { status: 200, error: false, message: 'Funcionario criado com sucesso'}
     }

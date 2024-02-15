@@ -1,5 +1,5 @@
-import { IsBoolean, IsDate, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
-import { ApiProperty, PartialType } from "@nestjs/swagger";
+import { IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
+import { ApiProperty, ApiPropertyOptional, PartialType } from "@nestjs/swagger";
 import { Schema } from "mongoose";
 import { Transform, Type } from "class-transformer";
 
@@ -8,7 +8,7 @@ export class EncomendasDTO{
     @IsNotEmpty({ message: 'Morador não pode ser vazio' })
     @IsString({message: 'Destinatario não pode ser vazio'})
     @ApiProperty({
-        example: 'Eduardo da Silva de Souza',
+        example: 'moradorID',
         description: `Os dados do morador serão utilizados para relacionar o morador com a encomenda em questão`,
     })
     readonly destinatario: Schema.Types.ObjectId;
@@ -23,7 +23,7 @@ export class EncomendasDTO{
 
     @IsNotEmpty({ message: 'Código de Rastreio não pode ser vazio' })
     @IsString({ message: 'Código de Rastreio deve ser preenchido somente com texto' })
-    @MinLength(5, { message: 'Código de Rastreio não pode ser menor que $constraint1 caracteres' })
+    @MinLength(8, { message: 'Código de Rastreio não pode ser menor que $constraint1 caracteres' })
     @MaxLength(100, { message: 'Código de Rastreio não pode ultrapassar $constraint1 caracteres' })
     @ApiProperty({
         example: 'AA123456789BR',
@@ -41,8 +41,8 @@ export class EncomendasDTO{
     
     @IsOptional()
     @IsString({message: 'Recebedor deve ser preenchido somente com texto'})
-    @ApiProperty({
-        example: 'Eduardo da Silva',
+    @ApiPropertyOptional({
+        examples: ['Eduardo da Silva', ''],
         description: `O recebedor da encomenda sera utilizado para salvar junto a encomenda`,
     })
     readonly recebedor?: string;
@@ -59,8 +59,8 @@ export class EncomendasDTO{
     @IsOptional()
     @Transform(({ value }) => new Date(value))
     @Type(() => Date)
-    @ApiProperty({
-        example: '2024-02-14T15:08:07.788Z',
+    @ApiPropertyOptional({
+        examples: ['2024-02-14T15:08:07.788Z', null],
         description: `A data de retirada da encomenda sera utilizado para salvar o horário no qual ela foi retirada`,
     })
     readonly dtretirada?: Date;

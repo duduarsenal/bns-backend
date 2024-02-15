@@ -39,7 +39,7 @@ import { EncomendasRepository } from './mongo/repository/encomendas.repository';
     JwtModule.register({
       global: true,
       secret: process.env.SECRET,
-      signOptions: { expiresIn: '12h' },
+      signOptions: { expiresIn: '24h' },
     }),
     MongooseModule.forRoot(process.env.DB_URI),
     MongooseModule.forFeature([
@@ -88,7 +88,7 @@ export class AppModule implements NestModule {
       )
       .apply(AuthAdminMiddleware) //Autenticação de NIVEL ADMIN
       .forRoutes(
-        // { path: '/funcionarios/create', method: RequestMethod.POST },
+        { path: '/funcionarios/create', method: RequestMethod.POST },
         { path: '/residencias/create', method: RequestMethod.POST },
       );
   }
