@@ -19,6 +19,10 @@ export class ResidenciasRepository {
         });
   }
 
+  async getBlocosApartamentos(): Promise<updateResidenciaDTO[]>{
+    return await this.residenciasModel.find().select('-moradores -proprietario -_id');
+  }
+
   async getResidenciaById(residenciaID: String): Promise<Residencias> {
     return await this.residenciasModel.findById({ _id: residenciaID })
         .populate({

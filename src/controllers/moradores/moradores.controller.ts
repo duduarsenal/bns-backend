@@ -1,6 +1,7 @@
-import { Body, Controller, Delete, Get, Param, Patch, Post, Request, UnauthorizedException } from '@nestjs/common';
-import { ApiBearerAuth, ApiParam, ApiTags } from '@nestjs/swagger';
+import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
+import { ApiTags } from '@nestjs/swagger';
 import { MoradoresDTO } from 'src/dto/moradores.dto';
+import { updateResidenciaDTO } from 'src/dto/residencias.dto';
 import { Moradores } from 'src/mongo/interfaces/moradores.interface';
 import { MoradoresService } from 'src/services/moradores/moradores.service';
 
@@ -19,6 +20,11 @@ export class MoradoresController {
   @Get('/:moradorID')
   async getMoradorById(@Param('moradorID') moradorID: string): Promise<Moradores> {
     return await this.moradoresService.getMoradorById(moradorID);
+  }
+
+  @Post('/filterbyblocoap')
+  async getMoradorByBlocoAp(@Body() {bloco, apartamento}: updateResidenciaDTO): Promise<Moradores>{
+      return await this.moradoresService.getMoradorByBlocoAp({bloco, apartamento});
   }
 
   //Rota para criar novos moradores

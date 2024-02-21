@@ -72,6 +72,7 @@ export class AppModule implements NestModule {
         //Moradores
         { path: '/moradores', method: RequestMethod.GET },
         { path: '/moradores/:moradorID', method: RequestMethod.GET },
+        { path: '/moradores/filterbyblocoap', method: RequestMethod.POST },
         { path: '/moradores/create', method: RequestMethod.POST },
         { path: '/moradores/:moradorID', method: RequestMethod.PATCH },
         { path: '/moradores/:moradorID', method: RequestMethod.DELETE },

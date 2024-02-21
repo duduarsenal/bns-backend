@@ -16,6 +16,11 @@ export class ResidenciasController {
         return await this.residenciaService.getAllResidencias();
     }
 
+    @Get('/blocosaps')
+    async getBlocosApartamentos(): Promise<updateResidenciaDTO[]>{
+        return await this.residenciaService.getBlocosApartamentos();
+    }
+
     //Rota para buscar uma residência com base em um filtro
     @Post('/filterby')
     async getResidenciaByFilter(@Body() residenciaData: ResidenciasDTO): Promise<Residencias>{

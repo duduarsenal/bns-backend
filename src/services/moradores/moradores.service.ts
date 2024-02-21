@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import mongoose, { mongo } from 'mongoose';
 import { MoradoresDTO } from 'src/dto/moradores.dto';
+import { updateResidenciaDTO } from 'src/dto/residencias.dto';
 import { Moradores } from 'src/mongo/interfaces/moradores.interface';
 import { MoradoresRepository } from 'src/mongo/repository/moradores.repository';
 import { ResidenciasRepository } from 'src/mongo/repository/residencias.repository';
@@ -32,6 +32,16 @@ export class MoradoresService {
         } catch (error) {
             console.log(error.message)
             throw new BadRequestException(error.message || 'Erro na busca pelo morador')
+        }
+    }
+
+    async getMoradorByBlocoAp(filtroBlocoAp: updateResidenciaDTO): Promise<Moradores>{
+        try {
+            const morador = await this.moradoresRepository.getMoradorByBlocoAp(filtroBlocoAp);
+            return morador;
+        } catch (error) {
+            console.log(error)
+            throw new BadRequestException(error.message || 'Erro ao buscar morador pelo bloco e ap')
         }
     }
 

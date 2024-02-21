@@ -20,6 +20,17 @@ export class ResidenciasService {
         }
     }
 
+    async getBlocosApartamentos(): Promise<updateResidenciaDTO[]>{
+        try {
+            const BlocosApartamentos = await this.residenciasRepository.getBlocosApartamentos();
+            if (!BlocosApartamentos) throw new BadRequestException('Nenhum bloco ou apartamento cadastrado')
+
+            return BlocosApartamentos;
+        } catch (error) {
+            throw new BadRequestException(error.message || 'Erro ao buscar blocos e apartamentos')
+        }
+    }
+
     async getResidenciaByFilter(residenciaData: ResidenciasDTO): Promise<Residencias>{
 
         try {
