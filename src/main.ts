@@ -12,7 +12,8 @@ async function bootstrap() {
     'Aplicativo para gerenciar encomendas em prédios/condomínios, permitindo armazenar dados de entregas, status de retirada e informações dos moradores, incluindo histórico de encomendas anteriores.',
   )
   .setVersion('1.0')
-  .addBearerAuth({type: 'http', description: 'Autorização para acessar as rotas do sistema'}, 'access-token')
+  .addBearerAuth()
+  .addSecurityRequirements('bearer')
   .build();
 
   const document = SwaggerModule.createDocument(app, config);
@@ -20,6 +21,7 @@ async function bootstrap() {
 
   //Usar os validadores em todo nosso app
   app.useGlobalPipes(new ValidationPipe());
+  app.enableCors();
   await app.listen(3030);
 }
 bootstrap();

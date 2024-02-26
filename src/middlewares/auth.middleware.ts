@@ -3,10 +3,9 @@ import { JwtService } from '@nestjs/jwt';
 import { Request, Response, NextFunction } from 'express';
 
 export async function AuthMiddleware(req: Request, res: Response, next: NextFunction) {
-  // console.log(req.headers);
-  const access_token: string = req.headers?.authorization.includes('Bearer') 
-  ? req.headers?.authorization.split(' ')[1] 
-  : req.headers?.authorization;
+  const access_token: string = req.headers?.authorization?.includes("Bearer") 
+      ? req.headers?.authorization?.split(' ')[1] 
+      : req.headers?.authorization;
   const jwtService = new JwtService;
 
   if (!access_token) {
