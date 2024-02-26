@@ -1,7 +1,7 @@
 import { Injectable } from '@nestjs/common';
 import { InjectModel } from '@nestjs/mongoose';
-import mongoose, { Model } from 'mongoose';
-import { ResidenciasDTO, updateResidenciaDTO } from 'src/dto/residencias.dto';
+import { Model } from 'mongoose';
+import { ResidenciasDTO, parcialResidenciaDTO } from 'src/dto/residencias.dto';
 import { Residencias } from '../interfaces/residencias.interface';
 
 @Injectable()
@@ -19,7 +19,7 @@ export class ResidenciasRepository {
         });
   }
 
-  async getBlocosApartamentos(): Promise<updateResidenciaDTO[]>{
+  async getBlocosApartamentos(): Promise<parcialResidenciaDTO[]>{
     return await this.residenciasModel.find().select('-moradores -proprietario -_id');
   }
 
@@ -32,17 +32,15 @@ export class ResidenciasRepository {
   }
 
   async getResidenciaByFilter(
-    residenciaData: ResidenciasDTO,
+    residenciaData: parcialResidenciaDTO,
   ): Promise<Residencias> {
     return await this.residenciasModel
       .findOne({
-        apartamento: residenciaData.apartamento,
-        bloco: residenciaData.bloco,
-        proprietario: residenciaData.proprietario,
+        ...residenciaData
       })
       .populate({
         path: 'moradores',
-        select: '-_id -residencia',
+        select: '-_id -residencia -encomendas',
       });
   }
 
@@ -98,7 +96,7 @@ export class ResidenciasRepository {
     return await this.residenciasModel.create(newResidencia);
   }
 
-  async updateResidencia(residenciaID: string, residenciaData: updateResidenciaDTO): Promise<Residencias>{
+  async updateResidencia(residenciaID: string, residenciaData: parcialResidenciaDTO): Promise<Residencias>{
     return await this.residenciasModel.findOneAndUpdate({_id: residenciaID}, {...residenciaData}, {new: true})
   }
 }

@@ -4,7 +4,7 @@ import { Model } from 'mongoose'
 import { Moradores } from "../interfaces/moradores.interface";
 import { MoradoresDTO } from "src/dto/moradores.dto";
 import { Residencias } from "../interfaces/residencias.interface";
-import { updateResidenciaDTO } from "src/dto/residencias.dto";
+import { parcialResidenciaDTO } from "src/dto/residencias.dto";
 
 @Injectable()
 export class MoradoresRepository {
@@ -49,7 +49,7 @@ export class MoradoresRepository {
             });
     }
 
-    async getMoradorByBlocoAp(filtroBlocoAp: updateResidenciaDTO): Promise<Moradores> {
+    async getMoradorByBlocoAp(filtroBlocoAp: parcialResidenciaDTO): Promise<Moradores> {
         const { bloco, apartamento } = filtroBlocoAp;
         let moradores: any;
         let morador: any;

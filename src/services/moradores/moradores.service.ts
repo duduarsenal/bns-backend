@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { MoradoresDTO } from 'src/dto/moradores.dto';
-import { updateResidenciaDTO } from 'src/dto/residencias.dto';
+import { parcialResidenciaDTO } from 'src/dto/residencias.dto';
 import { Moradores } from 'src/mongo/interfaces/moradores.interface';
 import { MoradoresRepository } from 'src/mongo/repository/moradores.repository';
 import { ResidenciasRepository } from 'src/mongo/repository/residencias.repository';
@@ -35,7 +35,7 @@ export class MoradoresService {
         }
     }
 
-    async getMoradorByBlocoAp(filtroBlocoAp: updateResidenciaDTO): Promise<Moradores>{
+    async getMoradorByBlocoAp(filtroBlocoAp: parcialResidenciaDTO): Promise<Moradores>{
         try {
             const morador = await this.moradoresRepository.getMoradorByBlocoAp(filtroBlocoAp);
             return morador;

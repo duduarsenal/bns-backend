@@ -1,6 +1,6 @@
 import { Body, Controller, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
-import { ResidenciasDTO, updateResidenciaDTO } from 'src/dto/residencias.dto';
+import { ResidenciasDTO, parcialResidenciaDTO } from 'src/dto/residencias.dto';
 import { Residencias } from 'src/mongo/interfaces/residencias.interface';
 import { ResidenciasService } from 'src/services/residencias/residencias.service';
 
@@ -17,13 +17,13 @@ export class ResidenciasController {
     }
 
     @Get('/blocosaps')
-    async getBlocosApartamentos(): Promise<updateResidenciaDTO[]>{
+    async getBlocosApartamentos(): Promise<parcialResidenciaDTO[]>{
         return await this.residenciaService.getBlocosApartamentos();
     }
 
     //Rota para buscar uma residência com base em um filtro
     @Post('/filterby')
-    async getResidenciaByFilter(@Body() residenciaData: ResidenciasDTO): Promise<Residencias>{
+    async getResidenciaByFilter(@Body() residenciaData: parcialResidenciaDTO): Promise<Residencias>{
         return await this.residenciaService.getResidenciaByFilter(residenciaData);
     }
 
@@ -34,7 +34,7 @@ export class ResidenciasController {
     }
 
     @Patch('/:residenciaID')
-    async updateResidencia(@Param('residenciaID') residenciaID: string, @Body() residenciaData: updateResidenciaDTO): Promise<Residencias>{
+    async updateResidencia(@Param('residenciaID') residenciaID: string, @Body() residenciaData: parcialResidenciaDTO): Promise<Residencias>{
         return await this.residenciaService.updateResidencia(residenciaID, residenciaData);
     }
 

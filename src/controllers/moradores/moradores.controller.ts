@@ -1,7 +1,7 @@
 import { Body, Controller, Delete, Get, Param, Patch, Post } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 import { MoradoresDTO } from 'src/dto/moradores.dto';
-import { updateResidenciaDTO } from 'src/dto/residencias.dto';
+import { parcialResidenciaDTO } from 'src/dto/residencias.dto';
 import { Moradores } from 'src/mongo/interfaces/moradores.interface';
 import { MoradoresService } from 'src/services/moradores/moradores.service';
 
@@ -23,7 +23,7 @@ export class MoradoresController {
   }
 
   @Post('/filterbyblocoap')
-  async getMoradorByBlocoAp(@Body() {bloco, apartamento}: updateResidenciaDTO): Promise<Moradores>{
+  async getMoradorByBlocoAp(@Body() {bloco, apartamento}: parcialResidenciaDTO): Promise<Moradores>{
       return await this.moradoresService.getMoradorByBlocoAp({bloco, apartamento});
   }
 

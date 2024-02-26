@@ -42,7 +42,6 @@ import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
     })
     readonly proprietario: string;
 
-    @IsString({message: 'ID do morado deve ser um texto'})
     @Type(() => MoradoresDTO)
     @ValidateNested({each: true})
     @ApiPropertyOptional({
@@ -52,4 +51,4 @@ import { ApiProperty, ApiPropertyOptional, PartialType } from '@nestjs/swagger';
     readonly moradores?: MoradoresDTO[]
   }
   
-  export class updateResidenciaDTO extends PartialType(ResidenciasDTO) {}
+  export class parcialResidenciaDTO extends PartialType(ResidenciasDTO) {}

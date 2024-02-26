@@ -1,5 +1,5 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
-import { ResidenciasDTO, updateResidenciaDTO } from 'src/dto/residencias.dto';
+import { ResidenciasDTO, parcialResidenciaDTO } from 'src/dto/residencias.dto';
 import { Residencias } from 'src/mongo/interfaces/residencias.interface';
 import { ResidenciasRepository } from 'src/mongo/repository/residencias.repository';
 
@@ -20,7 +20,7 @@ export class ResidenciasService {
         }
     }
 
-    async getBlocosApartamentos(): Promise<updateResidenciaDTO[]>{
+    async getBlocosApartamentos(): Promise<parcialResidenciaDTO[]>{
         try {
             const BlocosApartamentos = await this.residenciasRepository.getBlocosApartamentos();
             if (!BlocosApartamentos) throw new BadRequestException('Nenhum bloco ou apartamento cadastrado')
@@ -31,7 +31,7 @@ export class ResidenciasService {
         }
     }
 
-    async getResidenciaByFilter(residenciaData: ResidenciasDTO): Promise<Residencias>{
+    async getResidenciaByFilter(residenciaData: parcialResidenciaDTO): Promise<Residencias>{
 
         try {
             const residencia = await this.residenciasRepository.getResidenciaByFilter(residenciaData);
@@ -56,7 +56,7 @@ export class ResidenciasService {
         }
     }
 
-    async updateResidencia(residenciaID: string, residenciaData: updateResidenciaDTO): Promise<Residencias>{
+    async updateResidencia(residenciaID: string, residenciaData: parcialResidenciaDTO): Promise<Residencias>{
         try {
             const existResidencia = await this.residenciasRepository.getResidenciaById(residenciaID)
             if(!existResidencia) throw new BadRequestException('Residência não encontrada')

@@ -22,15 +22,14 @@ export class MoradoresDTO {
   })
   readonly name: string;
 
-  @IsNotEmpty({ message: 'Residência não pode ser vazio' })
-  @IsString({message: 'Id da residência precisa ser um texto'})
+  @IsOptional()
   @Type(() => ResidenciasDTO)
   @ValidateNested({each: true})
   @ApiProperty({
     example: 'residenciaID', 
     description: 'O id da residência será utilizado para criar a relação da residência com o morador'
   })
-  readonly residencia: ResidenciasDTO;
+  readonly residencia?: ResidenciasDTO;
 
   @IsOptional()
   @Type(() => EncomendasDTO)
