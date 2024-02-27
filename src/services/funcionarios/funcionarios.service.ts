@@ -36,12 +36,11 @@ export class FuncionariosService {
         }
     }
 
-    async authFuncionario(funcionarioData: AuthFuncionariosDTO): Promise<{ access_token: string }>{
+    async authFuncionario(funcionarioData: AuthFuncionariosDTO): Promise<{}>{
         try {
             const existFuncionario = await this.funcionariosRepository.authFuncionario(funcionarioData);
             if (!existFuncionario) throw new BadRequestException('Funcionario não encontrado');
 
-            //CRIPTOGRAFAR E OCULTAR SENHA DO USUARIO
             const payload = {
                 id: existFuncionario._id,
                 name: existFuncionario.name, 
@@ -52,7 +51,7 @@ export class FuncionariosService {
             const token = await this.jwtService.signAsync(payload);
             if (!token) throw new UnauthorizedException('Falha ao gerar token');
 
-            return { access_token: token }
+            return { user_name: existFuncionario.name, user_token: token }
         } catch (error) {
             console.error(error)
             throw new BadRequestException(error.message || 'Erro na autenticação do funcionario')

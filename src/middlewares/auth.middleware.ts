@@ -19,7 +19,7 @@ export async function AuthMiddleware(req: Request, res: Response, next: NextFunc
     
     if(!payload) throw new UnauthorizedException('Não Autorizado');
 
-    req['user'] = payload;
+    req['user'] = {user_token: access_token, ...payload};
   } catch {
     throw new UnauthorizedException('Não Autorizado');
   }

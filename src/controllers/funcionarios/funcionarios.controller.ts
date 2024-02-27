@@ -22,14 +22,24 @@ export class FuncionariosController {
     }
 
     //Rota de Informações do perfil do funcionario
+    @Get('/session')
+    async validateSession(@Request() req: Request){
+        const user = req['user'];
+        if (!user) throw new UnauthorizedException('Usuario não autorizado')
+
+        return {user_name: user.name, user_token: user.user_token}
+    }
+    
     @Get('/:funcionariosID')
     async getFuncionarioById(@Param('funcionariosID') funcionariosID: string): Promise<FuncionariosDTO>{
         return await this.funcionariosService.getFuncionarioById(funcionariosID);
     }
 
+    //Rota para validar sessão do usuario (token jwt)
+
     //Rota de login para o funcionario
     @Post('/auth')
-    async authFuncionario(@Body() { email, password }: AuthFuncionariosDTO): Promise<{access_token: string}>{
+    async authFuncionario(@Body() { email, password }: AuthFuncionariosDTO): Promise<{}>{
         return await this.funcionariosService.authFuncionario({ email, password });
     }
 
