@@ -1,4 +1,4 @@
-import { IsBoolean, IsNotEmpty, IsOptional, IsString, MaxLength, MinLength } from "class-validator";
+import { IsBoolean, IsInt, IsNotEmpty, IsNumber, IsOptional, IsString, Max, MaxLength, Min, MinLength } from "class-validator";
 import { ApiProperty, ApiPropertyOptional, PartialType } from "@nestjs/swagger";
 import { Schema } from "mongoose";
 import { Transform, Type } from "class-transformer";
@@ -32,7 +32,9 @@ export class EncomendasDTO{
     readonly codrastreio: string;
 
     @IsNotEmpty({ message: 'Status não pode ser vazio' })
-    @IsBoolean({message: 'Status deve ser um boolean true/false'})
+    @IsInt({message: 'Status precisa ser um numero inteiro'})
+    @Min(-1)
+    @Max(1)
     @ApiProperty({
         example: false,
         description: `O status da encomenda sera utilizado para verificar se a encomenda está entrega/a retirar`,

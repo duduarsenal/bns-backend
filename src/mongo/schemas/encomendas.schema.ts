@@ -13,7 +13,7 @@ export const EncomendasSchema = new Schema({
         require: true
     },
     codrastreio: String,
-    status: Boolean,
+    status: Number,
     recebedor: {
         type: String,
         require: false

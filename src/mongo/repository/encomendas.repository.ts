@@ -15,21 +15,24 @@ export class EncomendasRepository{
     async getAllEncomendas(): Promise<Encomendas[]>{
         return await this.encomendasModel.find()
             .populate({
-                path: 'destinatario residencia'
+                path: 'destinatario residencia',
+                select: '-moradores -encomendas -residencia'
             })
     }
 
     async getEncomendaById(encomendaID: string): Promise<Encomendas>{
         return await this.encomendasModel.findById({_id: encomendaID})
             .populate({
-                path: 'destinatario residencia'
+                path: 'destinatario residencia',
+                select: '-moradores -encomendas -residencia'
             })
     }
 
     async createEncomenda(newEncomenda: EncomendasDTO): Promise<Encomendas>{
         return (await this.encomendasModel.create(newEncomenda))
             .populate({
-                path: 'destinatario residencia'
+                path: 'destinatario residencia',
+                select: '-moradores -encomendas -residencia'
             })
     }
 
@@ -40,7 +43,8 @@ export class EncomendasRepository{
             {new: true}
             )
             .populate({
-                path: 'destinatario residencia'
+                path: 'destinatario residencia',
+                select: '-moradores -encomendas -residencia'
             })
     }
 

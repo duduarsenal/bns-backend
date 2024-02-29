@@ -23,7 +23,7 @@ export class FuncionariosDTO{
     readonly email: string;
 
     @IsString({message: 'Senha precisa ser um texto'})
-    @IsStrongPassword({minLength: 8}, {message: 'Senha não é forte suficiente, minimo 8 caracteres, 1 letra maiuscula, 1 numero e 1 caracter especial'})
+    // @IsStrongPassword({minLength: 8}, {message: 'Senha não é forte suficiente, minimo 8 caracteres, 1 letra maiuscula, 1 numero e 1 caracter especial'})
     @ApiProperty({
         example: 'senhaforte123@',
         description: `A senha é necessaria para realizar a autenticação junto ao email do funcionario`,

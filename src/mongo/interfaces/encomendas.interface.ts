@@ -6,7 +6,7 @@ export interface Encomendas extends Document {
     readonly destinatario: Schema.Types.ObjectId,
     readonly residencia: Schema.Types.ObjectId,
     readonly codrastreio: string,
-    readonly status: boolean,
+    readonly status: number,
     readonly recebedor?: string,
     readonly dtchegada: Date,
     readonly dtretirada?: Date,
