@@ -8,7 +8,7 @@ export async function AuthMiddleware(req: Request, res: Response, next: NextFunc
   : req.headers?.authorization;
   const jwtService = new JwtService;
   
-  console.log(access_token)
+  // console.log(access_token)
 
   if (!access_token) {
     throw new UnauthorizedException('Token Inválido');
@@ -18,7 +18,7 @@ export async function AuthMiddleware(req: Request, res: Response, next: NextFunc
     const payload: any = await jwtService.verifyAsync(access_token, {
       secret: process.env.SECRET,
     });
-    console.log('payload', payload)
+    // console.log('payload', payload)
     if(!payload) throw new UnauthorizedException('Não Autorizado');
     req['user'] = {user_token: access_token, ...payload};
   } catch {

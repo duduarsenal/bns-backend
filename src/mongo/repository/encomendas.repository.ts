@@ -39,7 +39,11 @@ export class EncomendasRepository{
     async updateEncomenda(encomendaID: string, encomendaData: updateEncomendaDTO): Promise<Encomendas>{
         return await this.encomendasModel.findOneAndUpdate(
             {_id: encomendaID},
-            {...encomendaData},
+            {
+                status: encomendaData.status,
+                recebedor: encomendaData.recebedor,
+                dtretirada: encomendaData.dtretirada
+            },
             {new: true}
             )
             .populate({

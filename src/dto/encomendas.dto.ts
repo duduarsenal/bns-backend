@@ -39,7 +39,7 @@ export class EncomendasDTO{
         example: false,
         description: `O status da encomenda sera utilizado para verificar se a encomenda está entrega/a retirar`,
     })
-    readonly status: boolean;
+    readonly status: number;
     
     @IsOptional()
     @IsString({message: 'Recebedor deve ser preenchido somente com texto'})
@@ -50,7 +50,7 @@ export class EncomendasDTO{
     readonly recebedor?: string;
 
     @IsNotEmpty({message: 'Data de Chegada não pode ser vazia'})
-    @Transform(({ value }) => new Date(value))
+    // @Transform(({ value }) => new Date(value))
     @Type(() => Date)
     @ApiProperty({
         example: '2024-02-14T15:07:30.510Z',
@@ -59,7 +59,7 @@ export class EncomendasDTO{
     readonly dtchegada: Date;
 
     @IsOptional()
-    @Transform(({ value }) => new Date(value))
+    // @Transform(({ value }) => new Date(value))
     @Type(() => Date)
     @ApiPropertyOptional({
         examples: ['2024-02-14T15:08:07.788Z', null],
